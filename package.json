@@ -1,0 +1,25 @@
+{
+  "name": "to-utf8",
+  "version": "0.1.0",
+  "description": "Convert JavaScript strings to UTF-8",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kriegslustig/to-utf8.git"
+  },
+  "keywords": [
+    "UTF-8",
+    "UTF-16",
+    "string",
+    "encoding"
+  ],
+  "author": "Luca Nils Schmid <npm@ls7.ch>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kriegslustig/to-utf8/issues"
+  },
+  "homepage": "https://github.com/Kriegslustig/to-utf8#readme"
+}
