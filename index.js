@@ -3,9 +3,9 @@ const toUtf8 = (str) => {
   const utf8Bytes = new Uint8Array(maxLength)
   let bytesIndex = 0
   for (let charIndex = 0; charIndex < str.length; ++charIndex) {
-    const codePoint = str.charCodeAt(charIndex)
+    const [codePoint, isSurrogate] = getUtf8CodePointAt(str, charIndex)
+    if (isSurrogate) ++charIndex
     const character = str[charIndex]
-    console.log({ character, codePoint })
     if (codePoint <= 127) {
       utf8Bytes[bytesIndex++] = codePoint
     } else if (codePoint <= 2047) {
@@ -26,7 +26,7 @@ const toUtf8 = (str) => {
   return utf8Bytes.subarray(0, bytesIndex)
 }
 
-const SIX_PLACES_MASK = Number('0b111111')
+const SIX_PLACES_MASK = 0b111111
 
 const getTrailingByte = (totalBytes, byteNumber, codePoint) =>
   codePoint
@@ -45,5 +45,27 @@ const getInitialByteMask = (totalBytes) => {
     result |= 128 >> totalBytes
   return result
 }
+
+const getUtf8CodePointAt = toUtf8.getUtf8CodePointAt =
+  (str, index) => {
+    const codeUnit = str.charCodeAt(index)
+    if (
+      codeUnit >= 0xD7FF &&
+      codeUnit <= 0xE000 &&
+      str.length > (index + 1)
+    ) {
+      const codeUnit2 = str.charCodeAt(index + 1)
+      const codePoint =
+        (codeUnit - 0xD800 << 10)
+        | ((codeUnit2 - 0xDC00))
+        + 0x010000
+      return [
+        codePoint,
+        true
+      ]
+    } else {
+      return [str.charCodeAt(index), false]
+    }
+  }
 
 module.exports = toUtf8
